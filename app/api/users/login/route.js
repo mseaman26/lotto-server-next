@@ -43,7 +43,7 @@ export async function POST(request) {
         // If successful, sign a token and return user data (excluding password)
         const { password: _, ...userData } = user.toObject(); // Exclude password
         const token = Auth.signToken(user); // Assuming you have a method for signing JWT tokens
-        return new Response(JSON.stringify({ success: true, data: { user: userData, token } }), { status: 200 });
+        return new Response(JSON.stringify({ success: true, data: { user: userData, token } }), { status: 200, headers: setCorsHeaders() });
     } catch (error) {
         console.error("Error during login: ", error);
         return NextResponse.json({ success: false, errorMessage: "Server error. Please try again later" }, { status: 500, headers: setCorsHeaders() });
