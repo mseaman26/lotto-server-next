@@ -1,6 +1,7 @@
 import { connectMongoDB } from "@/utils/mongodb";
 import User from "@/models/User";
 import Auth from "@/utils/auth";
+import { NextResponse } from "next/server";
 
 import { setCorsHeaders } from "@/utils/helpers";
 
@@ -9,10 +10,10 @@ export async function GET(request) {
 
     try {
         const users = await User.find({});
-        return new Response(JSON.stringify({ success: true, data: users }), { status: 200, headers: setCorsHeaders() });
+        return NextResponse.json({ success: true, data: users }, { status: 200, headers: setCorsHeaders() });
     }catch (error) {
         console.error("Error getting users: ", error);
-        return new Response(JSON.stringify({ success: false }), { status: 400, headers: setCorsHeaders() });
+        return NextResponse.json({ success: false, errorMessage: "Server error. Please try again later" }, { status: 500, headers: setCorsHeaders() });
     }
   }
   
@@ -25,13 +26,13 @@ export async function GET(request) {
         try {
             const existingUser = await User.findOne({ email });
             if (existingUser) {
-                return new Response(JSON.stringify({ success: false, errorMessage: "User with this email already exists" }), { status: 400, headers: setCorsHeaders() });
+                return NextResponse.json({ success: false, errorMessage: "User with this email already exists" }, { status: 400, headers: setCorsHeaders() });
             }
             const user = await User.create({ username, email, password });
             const token = Auth.signToken(user);
-            return new Response(JSON.stringify({ success: true, data: token }), { status: 201 });
+            return NextResponse.json({ success: true, data: token }, { status: 201, headers: setCorsHeaders() });
         } catch (error) {
             console.log("Error creating user: ", error);
-            return new Response(JSON.stringify({ success: false, errorMessage: 'Server error. Please try again later' }), { status: 400, headers: setCorsHeaders() });
+            return NextResponse.json({ success: false, errorMessage: "Server error. Please try again later" }, { status: 500, headers: setCorsHeaders() });
         }
   }
