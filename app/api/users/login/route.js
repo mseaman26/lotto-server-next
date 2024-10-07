@@ -4,6 +4,13 @@ import User from "@/models/User";
 import Auth from "@/utils/auth"; // Assuming you have a utility for signing tokens
 import { setCorsHeaders } from "@/utils/helpers";
 
+export async function OPTIONS() {
+    // Respond to preflight request with CORS headers
+    return new Response(null, {
+        status: 200,
+        headers: setCorsHeaders(),
+    });
+}
 
 export async function POST(request) {
     console.log('cors headers: ', setCorsHeaders())
