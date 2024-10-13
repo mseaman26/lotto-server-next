@@ -7,7 +7,7 @@ export async function GET(request) {
     await connectMongoDB();
 
     try {
-        const lottoPicks = await LottoPick.find({}).populate('userId');
+        const lottoPicks = await LottoPick.find({});
         return NextResponse.json({ success: true, data: lottoPicks }, { status: 200, headers: setCorsHeaders() });
     }catch (error) {
         console.error("Error getting lotto picks: ", error);
