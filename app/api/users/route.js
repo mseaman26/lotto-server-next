@@ -29,6 +29,7 @@ export async function GET(request) {
                 return NextResponse.json({ success: false, errorMessage: "User with this email already exists" }, { status: 400, headers: setCorsHeaders() });
             }
             const user = await User.create({ username, email, password });
+            console.log("User created: ", user);
             const token = Auth.signToken(user);
             return NextResponse.json({ success: true, data: token }, { status: 201, headers: setCorsHeaders() });
         } catch (error) {
