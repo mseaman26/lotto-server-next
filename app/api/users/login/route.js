@@ -14,8 +14,6 @@ export async function OPTIONS() {
 }
 
 export async function POST(request) {
-    console.log('cors headers: ', setCorsHeaders())
-    console.log('login route hit');
     await connectMongoDB();
 
     const body = await request.json();
@@ -43,7 +41,8 @@ export async function POST(request) {
         // If successful, sign a token and return user data (excluding password)
         const { password: _, ...userData } = user.toObject(); // Exclude password
         const token = Auth.signToken(user); // Assuming you have a method for signing JWT tokens
-        return new Response(JSON.stringify({ success: true, data: { user: userData, token } }), { status: 200, headers: setCorsHeaders() });
+        console.log('token', token);
+        return new Response(JSON.stringify({ success: true, data: token }), { status: 200, headers: setCorsHeaders() });
     } catch (error) {
         console.error("Error during login: ", error);
         return NextResponse.json({ success: false, errorMessage: "Server error. Please try again later" }, { status: 500, headers: setCorsHeaders() });

@@ -2,7 +2,6 @@ import { connectMongoDB } from "@/utils/mongodb";
 import User from "@/models/User";
 import Auth from "@/utils/auth";
 import { NextResponse } from "next/server";
-
 import { setCorsHeaders } from "@/utils/helpers";
 
 export async function GET(request) {
