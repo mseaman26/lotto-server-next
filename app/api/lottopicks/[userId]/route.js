@@ -6,6 +6,10 @@ import { setCorsHeaders } from "@/utils/helpers";
 //find lotto picks by userId
 
 export async function GET(req, {params}) {
+
+    if (req.method === "OPTIONS") {
+        return NextResponse.json({}, { status: 200, headers: getCorsHeaders() });
+    }
     await connectMongoDB();
 
     const { userId } = params;
