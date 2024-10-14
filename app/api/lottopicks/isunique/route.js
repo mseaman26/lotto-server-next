@@ -3,7 +3,6 @@
 import { connectMongoDB } from "@/utils/mongodb";
 import LottoPick from "@/models/LottoPick";
 import { NextResponse } from "next/server";
-import { setCorsHeaders } from "@/utils/helpers";
 
 export async function POST(request) {
     await connectMongoDB();
@@ -14,9 +13,9 @@ export async function POST(request) {
     try {
         const existingPicks = await LottoPick.find({ gameName });
         const isUnique = existingPicks.every((pick) => pick.numbers.join() !== numbers.join());
-        return NextResponse.json({ success: true, data: isUnique }, { status: 200, headers: setCorsHeaders() });
+        return NextResponse.json({ success: true, data: isUnique }, { status: 200 });
     } catch (error) {
         console.log("Error checking uniqueness: ", error);
-        return NextResponse.json({ success: false, errorMessage: "Server error. Please try again later" }, { status: 500, headers: setCorsHeaders() });
+        return NextResponse.json({ success: false, errorMessage: "Server error. Please try again later" }, { status: 500 });
     }
 }

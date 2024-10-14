@@ -1,17 +1,17 @@
 import { connectMongoDB } from "@/utils/mongodb";
 import LottoPick from "@/models/LottoPick";
 import { NextResponse } from "next/server";
-import { setCorsHeaders } from "@/utils/helpers";
+
 
 export async function GET(request) {
     await connectMongoDB();
 
     try {
         const lottoPicks = await LottoPick.find({});
-        return NextResponse.json({ success: true, data: lottoPicks }, { status: 200, headers: setCorsHeaders() });
+        return NextResponse.json({ success: true, data: lottoPicks }, { status: 200 });
     }catch (error) {
         console.error("Error getting lotto picks: ", error);
-        return NextResponse.json({ success: false, errorMessage: "Server error. Please try again later" }, { status: 500, headers: setCorsHeaders() });
+        return NextResponse.json({ success: false, errorMessage: "Server error. Please try again later" }, { status: 500});
     }
 }
 
@@ -24,9 +24,9 @@ export async function POST(request) {
     try {
         const lottoPick = await LottoPick.create({ gameName, numbers, userId });
         console.log("Lotto pick created: ", lottoPick);
-        return NextResponse.json({ success: true, data: lottoPick }, { status: 201, headers: setCorsHeaders() });
+        return NextResponse.json({ success: true, data: lottoPick }, { status: 201});
     } catch (error) {
         console.log("Error creating lotto pick: ", error);
-        return NextResponse.json({ success: false, errorMessage: "Server error. Please try again later" }, { status: 500, headers: setCorsHeaders() });
+        return NextResponse.json({ success: false, errorMessage: "Server error. Please try again later" }, { status: 500});
     }
 }
