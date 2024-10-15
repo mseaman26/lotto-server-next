@@ -15,18 +15,4 @@ export async function GET(request) {
     }
 }
 
-export async function POST(request) {
-    await connectMongoDB();
 
-    const body = await request.json();
-    const { gameName, numbers, userId } = body;
-
-    try {
-        const lottoPick = await LottoPick.create({ gameName, numbers, userId });
-        console.log("Lotto pick created: ", lottoPick);
-        return NextResponse.json({ success: true, data: lottoPick }, { status: 201});
-    } catch (error) {
-        console.log("Error creating lotto pick: ", error);
-        return NextResponse.json({ success: false, errorMessage: "Server error. Please try again later" }, { status: 500});
-    }
-}

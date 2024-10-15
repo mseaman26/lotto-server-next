@@ -3,15 +3,18 @@ import { connectMongoDB } from "@/utils/mongodb";
 import User from "@/models/User";
 import Auth from "@/utils/auth"; // Assuming you have a utility for signing tokens
 import { NextResponse } from "next/server";
+import {setCorsHeaders} from '@/utils/helpers'
 
 export async function OPTIONS() {
+    console.log('here')
     // Respond to preflight request with CORS headers
-    return new Response(null, {
+    return  NextResponse(null, {
         status: 200
     });
 }
 
 export async function POST(request) {
+    console.log('here')
     await connectMongoDB();
 
     const body = await request.json();
@@ -20,14 +23,14 @@ export async function POST(request) {
     // Validate input
     if (!email || !password) {
         console.log('Email and password are required');
-        return new Response(JSON.stringify({ success: false, errorMessage: "Email and password are required" }), { status: 400 });
+        return NextResponse(JSON.stringify({ success: false, errorMessage: "Email and password are required" }), { status: 400, headers: setCorsHeaders() });
     }
 
     try {
         // Find the user by email
         const user = await User.findOne({ email: email.toLowerCase() });
         if (!user) {
-        return NextResponse.json({ success: false, errorMessage: "Invalid email or password" }, { status: 401 });
+        return NextResponse.json({ success: false, errorMessage: "Invalid email or password" }, { status: 401, headers: setCorsHeaders() });
         }
 
         // Check if the provided password is valid
@@ -40,9 +43,9 @@ export async function POST(request) {
         const { password: _, ...userData } = user.toObject(); // Exclude password
         const token = Auth.signToken(user); // Assuming you have a method for signing JWT tokens
         console.log('token', token);
-        return new Response(JSON.stringify({ success: true, data: token }), { status: 200 });
+        return new Response(JSON.stringify({ success: true, data: token }), { status: 200, headers: setCorsHeaders() });
     } catch (error) {
         console.error("Error during login: ", error);
-        return NextResponse.json({ success: false, errorMessage: "Server error. Please try again later" }, { status: 500});
+        return NextResponse.json({ success: false, errorMessage: "Server error. Please try again later" }, { status: 500, headers: setCorsHeaders()});
     }
 }
