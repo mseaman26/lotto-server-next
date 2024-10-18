@@ -6,10 +6,10 @@ import { NextResponse } from "next/server";
 import {setCorsHeaders} from '@/utils/helpers'
 
 export async function OPTIONS() {
-    console.log('here')
+    console.log("here");
     // Respond to preflight request with CORS headers
-    return  NextResponse(null, {
-        status: 200
+    return NextResponse(null, {
+    status: 200,
     });
 }
 

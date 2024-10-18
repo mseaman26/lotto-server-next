@@ -20,6 +20,11 @@ const LottoPickSchema = new mongoose.Schema({
         required: true,
         unique: false,
     },
+    drawDate: {
+        type: Date,
+        required: true,
+        unique: false,
+    },
 }, { timestamps: true });
 
 export default mongoose.models.LottoPick || mongoose.model('LottoPick', LottoPickSchema);
