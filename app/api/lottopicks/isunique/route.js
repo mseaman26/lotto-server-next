@@ -8,10 +8,11 @@ export async function POST(request) {
     await connectMongoDB();
 
     const body = await request.json();
-    const { gameName, numbers } = body;
+    const { gameName, numbers, drawDate } = body;
+    console.log(drawDate)
 
     try {
-        const existingPicks = await LottoPick.find({ gameName });
+        const existingPicks = await LottoPick.find({ gameName, drawDate });
         const isUnique = existingPicks.every((pick) => pick.numbers.join() !== numbers.join());
         return NextResponse.json({ success: true, data: isUnique }, { status: 200 });
     } catch (error) {
