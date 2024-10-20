@@ -5,6 +5,7 @@ import LottoPick from "@/models/LottoPick";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
+    console.log("Checking uniqueness of lotto pick");
     await connectMongoDB();
 
     const body = await request.json();
