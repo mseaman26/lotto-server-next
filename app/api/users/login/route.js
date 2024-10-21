@@ -17,6 +17,12 @@ export async function POST(request) {
     console.log('here')
     await connectMongoDB();
 
+    if (request.method === 'OPTIONS') {
+        // Respond to preflight request
+        res.status(200).end();
+        return;
+      }
+
     const body = await request.json();
     const { email, password } = body;
 
