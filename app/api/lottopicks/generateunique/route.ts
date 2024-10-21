@@ -5,7 +5,16 @@ import { lottoStructurer } from "@/utils/lottoStructurer";
 import type { LottoStructure } from "@/utils/interfaces";
 import { setCorsHeaders } from "@/utils/helpers";
 
-
+export async function OPTIONS() {
+    const headers = new Headers();
+    headers.set('Access-Control-Allow-Origin', 'https://lotto-picker-rn-vite.vercel.app'); // Set the exact origin
+    headers.set('Access-Control-Allow-Credentials', 'true');
+    headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  
+    // Return 200 OK for the preflight request
+    return new NextResponse(null, { status: 200, headers });
+}
 
 export async function POST(request) {
     await connectMongoDB();

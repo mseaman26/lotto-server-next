@@ -5,11 +5,22 @@ import { setCorsHeaders } from "@/utils/helpers";
 
 
 //find lotto picks by userId
+export async function OPTIONS() {
+    const headers = new Headers();
+    headers.set('Access-Control-Allow-Origin', 'https://lotto-picker-rn-vite.vercel.app'); // Set the exact origin
+    headers.set('Access-Control-Allow-Credentials', 'true');
+    headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  
+    // Return 200 OK for the preflight request
+    return new NextResponse(null, { status: 200, headers });
+}
 
-export async function GET(req, {params}) {
+export async function GET(req, {params}): Promise<NextResponse> {
     console.log('userid route')
     if (req.method === "OPTIONS") {
-        return NextResponse.json({}, { status: 200, headers: setCorsHeaders() });
+        const response = new NextResponse(null, { status: 200, headers: setCorsHeaders() });
+        return response;
     }
     await connectMongoDB();
 
@@ -17,7 +28,8 @@ export async function GET(req, {params}) {
 
     try {
         const lottoPicks = await LottoPick.find({ userId }).sort({ createdAt: -1 });
-        return NextResponse.json({ success: true, data: lottoPicks }, { status: 200, headers: setCorsHeaders() });
+        
+        return  NextResponse.json({ success: true, data: lottoPicks }, { status: 200, headers: setCorsHeaders() });
     } catch (error) {
         console.error("Error getting lotto picks: ", error);
         return NextResponse.json({ success: false, errorMessage: "Server error. Please try again later" }, { status: 500, headers: setCorsHeaders() });
