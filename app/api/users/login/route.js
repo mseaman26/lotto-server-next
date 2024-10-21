@@ -9,7 +9,7 @@ export async function OPTIONS() {
     console.log("here");
     // Respond to preflight request with CORS headers
     return NextResponse(null, {
-    status: 200,
+    status: 200, headers: setCorsHeaders()
     });
 }
 
@@ -43,7 +43,7 @@ export async function POST(request) {
         const { password: _, ...userData } = user.toObject(); // Exclude password
         const token = Auth.signToken(user); // Assuming you have a method for signing JWT tokens
         console.log('token', token);
-        return new Response(JSON.stringify({ success: true, data: token }), { status: 200, headers: setCorsHeaders() });
+        return NextResponse(JSON.stringify({ success: true, data: token }), { status: 200, headers: setCorsHeaders() });
     } catch (error) {
         console.error("Error during login: ", error);
         return NextResponse.json({ success: false, errorMessage: "Server error. Please try again later" }, { status: 500, headers: setCorsHeaders()});

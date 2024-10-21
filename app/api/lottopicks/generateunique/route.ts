@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { connectMongoDB } from "@/utils/mongodb";
 import { lottoStructurer } from "@/utils/lottoStructurer";
 import type { LottoStructure } from "@/utils/interfaces";
+import { setCorsHeaders } from "@/utils/helpers";
 
 
 
@@ -72,16 +73,16 @@ export async function POST(request) {
         let numbers = generateUniquePick(); //returns sorted numbers
         //make sure numbers are unique and if not, generate new numbers
         let tries = 1;
-        while (existingPicks.some((pick) => pick.numbers.every((number, index) => number === numbers[index])) && tries < 1000) {
+        while (existingPicks.some((pick) => pick.numbers.every((number, index) => number === numbers[index]))) {
             tries++;
             numbers = generateUniquePick();
         }
 
-        return NextResponse.json({ success: true, data: numbers, tries: tries }, { status: 201 });
+        return NextResponse.json({ success: true, data: numbers, tries: tries }, { status: 201, headers: setCorsHeaders() });
         
 
     } catch (error) {
         console.log("Error checking uniqueness: ", error);
-        return NextResponse.json({ success: false, errorMessage: "Server error. Please try again later" }, { status: 500 });
+        return NextResponse.json({ success: false, errorMessage: "Server error. Please try again later" }, { status: 500, headers: setCorsHeaders() });
     }
 }
