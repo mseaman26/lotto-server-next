@@ -6,9 +6,9 @@ import { NextResponse } from "next/server";
 //find lotto picks by userId
 
 export async function GET(req, {params}) {
-
+    console.log('userid route')
     if (req.method === "OPTIONS") {
-        return NextResponse.json({}, { status: 200, headers: getCorsHeaders() });
+        return NextResponse.json({}, { status: 200});
     }
     await connectMongoDB();
 

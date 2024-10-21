@@ -1,5 +1,5 @@
-import { connectMongoDB } from "@/utils/mongodb";
-import LottoPick from "@/models/LottoPick";
+import { connectMongoDB } from "../../../utils/mongodb";
+import LottoPick from "../../../models/User";
 import { NextResponse } from "next/server";
 
 
