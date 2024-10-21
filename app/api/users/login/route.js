@@ -19,8 +19,8 @@ export async function POST(request) {
 
     if (request.method === 'OPTIONS') {
         // Respond to preflight request
-        res.status(200).end();
-        return;
+        
+        return NextResponse(null, { status: 200, headers: setCorsHeaders() });
       }
 
     const body = await request.json();
