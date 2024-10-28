@@ -25,6 +25,7 @@ export async function POST(request) {
 
     try {
         const existingPicks = await LottoPick.find({ gameName, drawDate });
+        console.log('existing picks', existingPicks)
         const isUnique = existingPicks.every((pick) => pick.numbers.join() !== numbers.join());
         return new NextResponse(JSON.stringify({ success: true, data: isUnique }), { status: 200 });
     } catch (error) {

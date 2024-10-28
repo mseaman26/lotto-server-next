@@ -1,5 +1,5 @@
 import { connectMongoDB } from "../../../utils/mongodb";
-import LottoPick from "../../../models/User";
+import LottoPick from "../../../models/LottoPick";
 import { NextResponse } from "next/server";
 
 export async function OPTIONS() {
@@ -22,6 +22,19 @@ export async function GET(request) {
         return new NextResponse(JSON.stringify({ success: true, data: lottoPicks }), { status: 200 });
     }catch (error) {
         console.error("Error getting lotto picks: ", error);
+        return new NextResponse(JSON.stringify({ success: false, errorMessage: "Server error. Please try again later" }), { status: 500});
+    }
+}
+export async function DELETE(request) {
+    await connectMongoDB();
+    const body = await request.json();
+    const { id } = body;
+    console.log('id', id)
+    try {
+        const deletedPick = await LottoPick.deleteOne({ _id: id });
+        return new NextResponse(JSON.stringify({ success: true, data: deletedPick }), { status: 200 });
+    }catch (error) {
+        console.error("Error deleting lotto pick: ", error);
         return new NextResponse(JSON.stringify({ success: false, errorMessage: "Server error. Please try again later" }), { status: 500});
     }
 }
