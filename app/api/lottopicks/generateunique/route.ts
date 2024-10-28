@@ -87,11 +87,11 @@ export async function POST(request) {
             numbers = generateUniquePick();
         }
 
-        return NextResponse.json({ success: true, data: numbers, tries: tries }, { status: 201, headers: setCorsHeaders() });
+        return new NextResponse(JSON.stringify({ success: true, data: numbers, tries: tries }), { status: 201, headers: setCorsHeaders() });
         
 
     } catch (error) {
         console.log("Error checking uniqueness: ", error);
-        return NextResponse.json({ success: false, errorMessage: "Server error. Please try again later" }, { status: 500, headers: setCorsHeaders() });
+        return new NextResponse(JSON.stringify({ success: false, errorMessage: "Server error. Please try again later" }), { status: 500, headers: setCorsHeaders() });
     }
 }

@@ -26,9 +26,9 @@ export async function POST(request) {
     try {
         const existingPicks = await LottoPick.find({ gameName, drawDate });
         const isUnique = existingPicks.every((pick) => pick.numbers.join() !== numbers.join());
-        return NextResponse.json({ success: true, data: isUnique }, { status: 200 });
+        return new NextResponse(JSON.stringify({ success: true, data: isUnique }), { status: 200 });
     } catch (error) {
         console.log("Error checking uniqueness: ", error);
-        return NextResponse.json({ success: false, errorMessage: "Server error. Please try again later" }, { status: 500 });
+        return new NextResponse.json(JSON.stringify({ success: false, errorMessage: "Server error. Please try again later" }), { status: 500 });
     }
 }

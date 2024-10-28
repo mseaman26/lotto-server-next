@@ -20,11 +20,11 @@ export async function POST(request) {
     console.log('here')
     await connectMongoDB();
 
-    if (request.method === 'OPTIONS') {
-        // Respond to preflight request
+    // if (request.method === 'OPTIONS') {
+    //     // Respond to preflight request
         
-        return new NextResponse.json({success: true, data: token}, { status: 200, headers: setCorsHeaders() });
-      }
+    //     return new NextResponse.json({success: true, data: token}, { status: 200, headers: setCorsHeaders() });
+    // }
 
     const body = await request.json();
     const { email, password } = body;
@@ -39,13 +39,14 @@ export async function POST(request) {
         // Find the user by email
         const user = await User.findOne({ email: email.toLowerCase() });
         if (!user) {
-        return new NextResponse.json({ success: false, errorMessage: "Invalid email or password" }, { status: 401, headers: setCorsHeaders() });
+        return new NextResponse(JSON.stringify({ success: false, errorMessage: "Invalid email or password" }), { status: 401, headers: setCorsHeaders() });
         }
 
         // Check if the provided password is valid
         const isPasswordValid = await user.isPasswordValid(password);
         if (!isPasswordValid) {
-        return new NextResponse.json({ success: false, errorMessage: "Invalid email or password" }, { status: 401 });
+            console.log('Invalid email or password');
+            return new NextResponse(JSON.stringify({ success: false, errorMessage: "Invalid email or password" }), { status: 401, headers: setCorsHeaders() });
         }
 
         // If successful, sign a token and return user data (excluding password)
@@ -55,6 +56,6 @@ export async function POST(request) {
         return new NextResponse(JSON.stringify({ success: true, data: token }), { status: 200, headers: setCorsHeaders() });
     } catch (error) {
         console.error("Error during login: ", error);
-        return new NextResponse.json({ success: false, errorMessage: "Server error. Please try again later" }, { status: 500, headers: setCorsHeaders()});
+        return new NextResponse(JSON.stringify({ success: false, errorMessage: "Server error. Please try again later" }), { status: 500, headers: setCorsHeaders()});
     }
 }

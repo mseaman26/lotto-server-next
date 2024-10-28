@@ -19,10 +19,10 @@ export async function GET(request) {
 
     try {
         const lottoPicks = await LottoPick.find({});
-        return NextResponse.json({ success: true, data: lottoPicks }, { status: 200 });
+        return new NextResponse(JSON.stringify({ success: true, data: lottoPicks }), { status: 200 });
     }catch (error) {
         console.error("Error getting lotto picks: ", error);
-        return NextResponse.json({ success: false, errorMessage: "Server error. Please try again later" }, { status: 500});
+        return new NextResponse(JSON.stringify({ success: false, errorMessage: "Server error. Please try again later" }), { status: 500});
     }
 }
 

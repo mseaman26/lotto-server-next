@@ -47,9 +47,9 @@ export async function POST(req, {params}) {
         console.log('draw date', drawDate);
         const lottoPick = await LottoPick.create({ gameName, numbers, userId, drawDate });
         console.log("Lotto pick created: ", lottoPick);
-        return NextResponse.json({ success: true, data: lottoPick }, { status: 201, headers: setCorsHeaders() });
+        return new NextResponse(JSON.stringify({ success: true, data: lottoPick }), { status: 201, headers: setCorsHeaders() });
     } catch (error) {
         console.log("Error creating lotto pick: ", error);
-        return NextResponse.json({ success: false, errorMessage: "Server error. Please try again later: ", error }, { status: 500, headers: setCorsHeaders() });
+        return new NextResponse(JSON.stringify({ success: false, errorMessage: "Server error. Please try again later: ", error }), { status: 500, headers: setCorsHeaders() });
     }
 }
